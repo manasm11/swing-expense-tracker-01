@@ -9,6 +9,8 @@ import com.manasmishra.expensetracker.db.DbConnect;
 import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author manas
@@ -23,9 +25,11 @@ public class ExpenseTracker extends javax.swing.JFrame {
     public ExpenseTracker() {
         initComponents();
         displayCategories();
+        dateChooser.setSelectableDateRange(null, new Date());
     }
 
     private void displayCategories() {
+        categoryComboBox.removeAllItems();
         try {
             ResultSet resultSet = DbConnect.statement.executeQuery("select category from category_info");
             while (resultSet.next()) {
@@ -54,7 +58,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         dateLabel = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dateChooser = new com.toedter.calendar.JDateChooser();
         amountLabel = new javax.swing.JLabel();
         amountField = new javax.swing.JTextField();
         categoryLabel = new javax.swing.JLabel();
@@ -126,6 +130,11 @@ public class ExpenseTracker extends javax.swing.JFrame {
                 amountFieldActionPerformed(evt);
             }
         });
+        amountField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                amountFieldKeyTyped(evt);
+            }
+        });
 
         categoryLabel.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         categoryLabel.setForeground(new java.awt.Color(255, 255, 255));
@@ -148,6 +157,11 @@ public class ExpenseTracker extends javax.swing.JFrame {
         addExpenseButton.setBackground(new java.awt.Color(255, 255, 153));
         addExpenseButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         addExpenseButton.setText("ADD");
+        addExpenseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addExpenseButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -158,7 +172,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addGap(15, 15, 15)
                                 .addComponent(dateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                                .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(amountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -182,7 +196,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(dateLabel, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(dateChooser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                                 .addComponent(amountField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(amountLabel))
@@ -195,16 +209,13 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addGap(37, 37, 37))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{amountField, amountLabel, categoryLabel, dateLabel, jDateChooser1});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[]{amountField, amountLabel, categoryLabel, dateChooser, dateLabel});
 
         jLabel5.setText("This Month Expenses");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
+
                 },
                 new String[]{
                         "ID", "Date", "Category", "Amount"
@@ -333,7 +344,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
     }//GEN-LAST:event_categoryComboBoxActionPerformed
 
     private void addNewCategoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addNewCategoryButtonActionPerformed
-        new Category().setVisible(true);
+        new Category(this::displayCategories).setVisible(true);
     }//GEN-LAST:event_addNewCategoryButtonActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -343,6 +354,39 @@ public class ExpenseTracker extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void addExpenseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExpenseButtonActionPerformed
+        try {
+            java.util.Date date = dateChooser.getDate();
+            String amountString = amountField.getText();
+            if (categoryComboBox.getSelectedItem() instanceof String category) {
+                boolean areAllFieldsEntered = date != null && !amountString.isBlank() && !category.isBlank();
+                if (areAllFieldsEntered) {
+                    DbConnect.statement.executeUpdate("insert into expenses (category, e_date_iso8601, amount) values ('%s', '%s', %d)".formatted(
+                            category, dateToString(date), Integer.parseInt(amountString)));
+                    JOptionPane.showMessageDialog(null, "Expense added successfully");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please add all the details.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "unable to convert category from table to string");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_addExpenseButtonActionPerformed
+
+    private void amountFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amountFieldKeyTyped
+        char ch = evt.getKeyChar();
+        if (!Character.isDigit(ch)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_amountFieldKeyTyped
+
+    private String dateToString(Date date) {
+        return new SimpleDateFormat("dd-MMM-yyyy").format(date);
+    }
 
     /**
      * @param args the command line arguments
@@ -377,8 +421,8 @@ public class ExpenseTracker extends javax.swing.JFrame {
     private java.awt.Button button1;
     private javax.swing.JComboBox<String> categoryComboBox;
     private javax.swing.JLabel categoryLabel;
+    private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JLabel dateLabel;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;

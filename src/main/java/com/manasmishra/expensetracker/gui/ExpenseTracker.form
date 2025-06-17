@@ -158,7 +158,7 @@
                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                   <Component id="dateLabel" pref="58" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jDateChooser1" pref="119" max="32767" attributes="0"/>
+                  <Component id="dateChooser" pref="119" max="32767" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="amountLabel" min="-2" pref="82" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -186,7 +186,7 @@
                   <EmptySpace type="unrelated" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="dateLabel" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="jDateChooser1" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="dateChooser" linkSize="1" alignment="1" min="-2" max="-2" attributes="0"/>
                       <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                           <Component id="amountField" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="amountLabel" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -258,7 +258,7 @@
             <Property name="text" type="java.lang.String" value="Date:"/>
           </Properties>
         </Component>
-        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
+        <Component class="com.toedter.calendar.JDateChooser" name="dateChooser">
         </Component>
         <Component class="javax.swing.JLabel" name="amountLabel">
           <Properties>
@@ -277,6 +277,7 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="amountFieldActionPerformed"/>
+            <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="amountFieldKeyTyped"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="categoryLabel">
@@ -322,6 +323,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="ADD"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addExpenseButtonActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -340,7 +344,7 @@
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="4">
+              <Table columnCount="4" rowCount="0">
                 <Column editable="false" title="ID" type="java.lang.Object"/>
                 <Column editable="false" title="Date" type="java.lang.Object"/>
                 <Column editable="true" title="Category" type="java.lang.Object"/>

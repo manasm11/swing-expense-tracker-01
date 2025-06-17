@@ -8,7 +8,9 @@ import com.manasmishra.expensetracker.db.DbConnect;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
 import java.sql.*;
+import java.util.function.Function;
 
 /**
  * @author manas
@@ -17,12 +19,19 @@ public class Category extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Category.class.getName());
 
+    private Runnable onClose;
+
     /**
      * Creates new form Category
      */
     public Category() {
         initComponents();
         getEntries();
+    }
+
+    public Category(Runnable onClose) {
+        this();
+        this.onClose = onClose;
     }
 
     /**
@@ -45,6 +54,11 @@ public class Category extends javax.swing.JFrame {
         deleteCategoryButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 0));
 
@@ -74,6 +88,11 @@ public class Category extends javax.swing.JFrame {
         jLabel2.setText("Category");
 
         categoryInputText.setToolTipText("");
+        categoryInputText.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryInputTextActionPerformed(evt);
+            }
+        });
 
         addCategoryButton.setText("Add");
         addCategoryButton.addActionListener(new java.awt.event.ActionListener() {
@@ -121,6 +140,11 @@ public class Category extends javax.swing.JFrame {
                 "S No.", "Category"
             }
         ));
+        categoryTable.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                categoryTableKeyPressed(evt);
+            }
+        });
         jScrollPane1.setViewportView(categoryTable);
 
         deleteCategoryButton.setFont(new java.awt.Font("sansserif", 0, 36)); // NOI18N
@@ -231,6 +255,22 @@ public class Category extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_deleteCategoryButtonActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (onClose != null) {
+            onClose.run();
+        }
+    }//GEN-LAST:event_formWindowClosed
+
+    private void categoryInputTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryInputTextActionPerformed
+        addCategoryButtonActionPerformed(null);
+    }//GEN-LAST:event_categoryInputTextActionPerformed
+
+    private void categoryTableKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_categoryTableKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            deleteCategoryButtonActionPerformed(null);
+        }
+    }//GEN-LAST:event_categoryTableKeyPressed
 
     /**
      * @param args the command line arguments
