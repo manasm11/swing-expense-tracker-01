@@ -67,10 +67,10 @@ public class ExpenseTracker extends javax.swing.JFrame {
         addExpenseButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        button1 = new java.awt.Button();
+        expenseTable = new javax.swing.JTable();
+        removeExpenseButton = new java.awt.Button();
         jPanel3 = new javax.swing.JPanel();
-        label2 = new java.awt.Label();
+        totalAmountLabel = new java.awt.Label();
         label1 = new java.awt.Label();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
@@ -213,7 +213,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
 
         jLabel5.setText("This Month Expenses");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        expenseTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{
 
                 },
@@ -229,13 +229,13 @@ public class ExpenseTracker extends javax.swing.JFrame {
                 return canEdit[columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(expenseTable);
 
-        button1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        button1.setLabel("Remove");
+        removeExpenseButton.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        removeExpenseButton.setLabel("Remove");
 
-        label2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
-        label2.setText("0");
+        totalAmountLabel.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
+        totalAmountLabel.setText("0");
 
         label1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         label1.setText("Total Expenses: ");
@@ -248,7 +248,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -257,7 +257,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addContainerGap()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(totalAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap())
         );
 
@@ -311,7 +311,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(removeExpenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addComponent(jScrollPane1))
                                 .addContainerGap())
         );
@@ -323,7 +323,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel5)
-                                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(removeExpenseButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(48, 48, 48)
@@ -385,7 +385,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
     }//GEN-LAST:event_amountFieldKeyTyped
 
     private String dateToString(Date date) {
-        return new SimpleDateFormat("dd-MMM-yyyy").format(date);
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     /**
@@ -418,11 +418,11 @@ public class ExpenseTracker extends javax.swing.JFrame {
     private javax.swing.JButton addNewCategoryButton;
     private javax.swing.JTextField amountField;
     private javax.swing.JLabel amountLabel;
-    private java.awt.Button button1;
     private javax.swing.JComboBox<String> categoryComboBox;
     private javax.swing.JLabel categoryLabel;
     private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JLabel dateLabel;
+    private javax.swing.JTable expenseTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
@@ -439,8 +439,8 @@ public class ExpenseTracker extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private java.awt.Label label1;
-    private java.awt.Label label2;
-    // End of variables declaration//GEN-END:variables
+    private java.awt.Button removeExpenseButton;
+    private java.awt.Label totalAmountLabel;
+// End of variables declaration//GEN-END:variables
 }
