@@ -264,6 +264,7 @@ public class ExpenseTracker extends javax.swing.JFrame {
 
         removeExpenseButton.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         removeExpenseButton.setLabel("Remove");
+        removeExpenseButton.addActionListener(_ -> removeExpenseAction());
 
         totalAmountLabel.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         totalAmountLabel.setText("0");
@@ -365,6 +366,17 @@ public class ExpenseTracker extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void removeExpenseAction() {
+        int selectedRow = expenseTable.getSelectedRow();
+        String eid = (String) expenseTable.getValueAt(selectedRow, 0);
+        try {
+            DbConnect.statement.executeUpdate("DELETE FROM expenses WHERE eid = %s;".formatted(eid));
+            displayExpenses();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
 
     private void amountFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_amountFieldActionPerformed
         // TODO add your handling code here:
