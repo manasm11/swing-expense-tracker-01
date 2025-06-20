@@ -369,6 +369,9 @@ public class ExpenseTracker extends javax.swing.JFrame {
 
     private void removeExpenseAction() {
         int selectedRow = expenseTable.getSelectedRow();
+        if (selectedRow < 0) {
+            return;
+        }
         String eid = (String) expenseTable.getValueAt(selectedRow, 0);
         try {
             DbConnect.statement.executeUpdate("DELETE FROM expenses WHERE eid = %s;".formatted(eid));
