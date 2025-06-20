@@ -7,6 +7,7 @@ package com.manasmishra.expensetracker.gui;
 import com.manasmishra.expensetracker.db.DbConnect;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -25,7 +26,31 @@ public class ExpenseTracker extends javax.swing.JFrame {
     public ExpenseTracker() {
         initComponents();
         displayCategories();
+        displayExpenses();
         dateChooser.setSelectableDateRange(null, new Date());
+    }
+
+    private void displayExpenses() {
+        DefaultTableModel model = (DefaultTableModel) expenseTable.getModel();
+        int rowCount = model.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            model.removeRow(0);
+        }
+        try {
+            ResultSet resultSet = DbConnect.statement.executeQuery(
+                    "select eid, category, e_date, amount from expenses");
+            while (resultSet.next()) {
+                model.addRow(new Object[]{
+                        resultSet.getString("eid"),
+                        resultSet.getString("category"),
+                        resultSet.getString("e_date"),
+                        resultSet.getString("amount"),
+                });
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
 
     private void displayCategories() {
@@ -39,7 +64,6 @@ public class ExpenseTracker extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
-
     }
 
     /**
@@ -221,9 +245,16 @@ public class ExpenseTracker extends javax.swing.JFrame {
                         "ID", "Date", "Category", "Amount"
                 }
         ) {
-            boolean[] canEdit = new boolean[]{
-                    false, false, true, false
+            Class[] types = new Class[]{
+                    java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean[]{
+                    false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
@@ -362,9 +393,10 @@ public class ExpenseTracker extends javax.swing.JFrame {
             if (categoryComboBox.getSelectedItem() instanceof String category) {
                 boolean areAllFieldsEntered = date != null && !amountString.isBlank() && !category.isBlank();
                 if (areAllFieldsEntered) {
-                    DbConnect.statement.executeUpdate("insert into expenses (category, e_date_iso8601, amount) values ('%s', '%s', %d)".formatted(
+                    DbConnect.statement.executeUpdate("insert into expenses (category, e_date, amount) values ('%s', '%s', %d)".formatted(
                             category, dateToString(date), Integer.parseInt(amountString)));
                     JOptionPane.showMessageDialog(null, "Expense added successfully");
+                    displayExpenses();
                 } else {
                     JOptionPane.showMessageDialog(null, "Please add all the details.");
                 }
@@ -442,5 +474,5 @@ public class ExpenseTracker extends javax.swing.JFrame {
     private java.awt.Label label1;
     private java.awt.Button removeExpenseButton;
     private java.awt.Label totalAmountLabel;
-// End of variables declaration//GEN-END:variables
+    // End of variables declaration//GEN-END:variables
 }
